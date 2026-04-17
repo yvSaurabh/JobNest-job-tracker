@@ -30,7 +30,7 @@ const jobSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["Applied", "shortlisted", "Interview", "Offer", "Rejected"],
+            enum: ["Applied", "Shortlisted", "Interview", "Offer", "Rejected"],
             default: "Applied",
         },
         jobLink: {

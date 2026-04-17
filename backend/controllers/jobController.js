@@ -164,10 +164,36 @@ const deleteJob = async (req, res) => {
 
 };
 
+const getJobStats = async (req, res) => {
+    try {
+        const jobs = await Job.find({ user: req.user._id});
+
+        const stats = {
+            total: jobs.length,
+            applied: jobs.filter((job)=> job.status=== "Applied").length,
+            shortlisted: jobs.filter((job)=> job.status=== "Shortlisted").length,
+            interview: jobs.filter((job)=> job.status==="Interview").length,
+            offer: jobs.filter((job)=> job.status==="Offer").length,
+            rejected: jobs.filter((job)=> job.status==="Rejected").length,
+        };
+
+        res.status(200).json({
+            success: true,
+            message: "Job statistics fetched successfully",
+            data: stats,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error while fetching job statistics",
+        });
+    }
+};
 module.exports = { 
     createJob,
     getJobs,
     getJobById,
     updateJob,
     deleteJob,
+    getJobStats,
 };
