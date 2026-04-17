@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
 import AddJob from "./pages/AddJob";
 import EditJob from "./pages/EditJob";
+import JobDetails from "./pages/JobDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 import useAuth from "./context/useAuth";
 
@@ -51,6 +52,14 @@ const AppLayout = () => {
             element={
               <ProtectedRoute>
                 <Jobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/jobs/:id"
+            element={
+              <ProtectedRoute>
+                <JobDetails />
               </ProtectedRoute>
             }
           />
