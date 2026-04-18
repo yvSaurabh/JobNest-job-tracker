@@ -20,22 +20,43 @@ const AppLayout = () => {
 
   return (
     <>
-      <nav style={{ display: "flex", gap: "16px", padding: "16px" }}>
-        <Link to="/">Dashboard</Link>
-        <Link to="/jobs">Jobs</Link>
-        <Link to="/jobs/add">Add Job</Link>
+         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom px-3 py-3">
+             <div className="container-fluid d-flex flex-wrap gap-2 align-items-center">
+                <Link to="/" className="navbar-brand fw-bold text-primary">
+                   JobNest
+                </Link>
 
-        {!user ? (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
-        ) : (
-          <button onClick={handleLogout} className="btn btn-danger btn-sm">
-            Logout
-          </button>
-        )}
-      </nav>
+               <div className="d-flex flex-wrap gap-2 align-items-center">
+                  <Link to="/" className="btn btn-outline-primary btn-sm">
+                    Dashboard
+                 </Link>
+
+                 <Link to="/jobs" className="btn btn-outline-secondary btn-sm">
+                    Jobs
+                 </Link>
+
+                 <Link to="/jobs/add" className="btn btn-primary btn-sm">
+                   Add Job
+                 </Link>
+
+                  {!user ? (
+                <>
+                 <Link to="/login" className="btn btn-outline-success btn-sm">
+                    Login
+                  </Link>
+                  <Link to="/register" className="btn btn-success btn-sm">
+                    Register
+                 </Link>
+               </>
+            ) : (
+        <button onClick={handleLogout} className="btn btn-danger btn-sm">
+          Logout
+        </button>
+      )}
+    </div>
+  </div>
+</nav>
+
 
       <main style={{ padding: "16px" }}>
         <Routes>

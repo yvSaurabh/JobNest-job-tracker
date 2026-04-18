@@ -57,49 +57,50 @@ const Dashboard = () => {
     
        </div>
 
-            <div className="row g-3">
+                  <div className="row g-3">
         <div className="col-md-4">
-          <div className="card border-primary shadow-sm p-3">
-            <h5 className="text-primary">Total Applications</h5>
-            <h3>{stats.total}</h3>
+          <div className="card border-primary shadow-sm h-100 p-3">
+            <p className="text-muted mb-2">Total Applications</p>
+            <h2 className="text-primary mb-0">{stats.total}</h2>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card border-secondary shadow-sm p-3">
-            <h5 className="text-secondary">Applied</h5>
-            <h3>{stats.applied}</h3>
+          <div className="card border-secondary shadow-sm h-100 p-3">
+            <p className="text-muted mb-2">Applied</p>
+            <h2 className="mb-0">{stats.applied}</h2>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card border-info shadow-sm p-3">
-            <h5 className="text-info">Shortlisted</h5>
-            <h3>{stats.shortlisted}</h3>
+          <div className="card border-info shadow-sm h-100 p-3">
+            <p className="text-muted mb-2">Shortlisted</p>
+            <h2 className="text-info mb-0">{stats.shortlisted}</h2>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card border-warning shadow-sm p-3">
-            <h5 className="text-warning">Interview</h5>
-            <h3>{stats.interview}</h3>
+          <div className="card border-warning shadow-sm h-100 p-3">
+            <p className="text-muted mb-2">Interview</p>
+            <h2 className="text-warning mb-0">{stats.interview}</h2>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card border-success shadow-sm p-3">
-            <h5 className="text-success">Offer</h5>
-            <h3>{stats.offer}</h3>
+          <div className="card border-success shadow-sm h-100 p-3">
+            <p className="text-muted mb-2">Offer</p>
+            <h2 className="text-success mb-0">{stats.offer}</h2>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card border-danger shadow-sm p-3">
-            <h5 className="text-danger">Rejected</h5>
-            <h3>{stats.rejected}</h3>
+          <div className="card border-danger shadow-sm h-100 p-3">
+            <p className="text-muted mb-2">Rejected</p>
+            <h2 className="text-danger mb-0">{stats.rejected}</h2>
           </div>
         </div>
       </div>
+
 
       <div className="mt-5">
         <h4 className="mb-3">Recent Applications</h4>

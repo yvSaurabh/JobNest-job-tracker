@@ -42,8 +42,11 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: "500px" }}>
-      <h2 className="mb-4">Create Your Account</h2>
+    <div className="container py-5" style={{ maxWidth: "520px" }}>
+      <div className="mb-4 text-center">
+       <h2 className="mb-2">Create Your Account</h2>
+        <p className="text-muted mb-0">Start tracking your job applications in one place.</p>
+     </div>
 
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
         {error && <div className="alert alert-danger">{error}</div>}

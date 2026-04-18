@@ -81,91 +81,101 @@ const Jobs = () => {
   return (
     <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-          <h2>Your Job Applications</h2>
-            <a href="/jobs/add" className="btn btn-primary">
-              Add Job
-           </a>
-       </div>
+  <h2 className="mb-0">Your Job Applications</h2>
+  <a href="/jobs/add" className="btn btn-primary">
+    Add Job
+  </a>
+</div>
 
-       <div className="mb-4">
-         <input
-           type="text"
-           className="form-control"
-           placeholder="Search by company or role..."
-           value={searchTerm}
-           onChange={(event) => setSearchTerm(event.target.value)}
-          />
-       </div>
+<div className="row g-3 mb-4">
+  <div className="col-md-4">
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Search by company or role..."
+      value={searchTerm}
+      onChange={(event) => setSearchTerm(event.target.value)}
+    />
+  </div>
 
-       <div className="mb-4">
-             <select
-                className="form-select"
-                value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
-              >
-              <option value="">All Statuses</option>
-              <option value="Applied">Applied</option>
-              <option value="Shortlisted">Shortlisted</option>
-              <option value="Interview">Interview</option>
-              <option value="Offer">Offer</option>
-              <option value="Rejected">Rejected</option>
-           </select>
-       </div>
+  <div className="col-md-3">
+    <select
+      className="form-select"
+      value={statusFilter}
+      onChange={(event) => setStatusFilter(event.target.value)}
+    >
+      <option value="">All Statuses</option>
+      <option value="Applied">Applied</option>
+      <option value="Shortlisted">Shortlisted</option>
+      <option value="Interview">Interview</option>
+      <option value="Offer">Offer</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
 
-              <div className="mb-4">
-                   <select
-                       className="form-select"
-                       value={jobTypeFilter}
-                       onChange={(event) => setJobTypeFilter(event.target.value)}
-                    >
-                       <option value="">All Job Types</option>
-                       <option value="Full-time">Full-time</option>
-                       <option value="Part-time">Part-time</option>
-                       <option value="Internship">Internship</option>
-                       <option value="Contract">Contract</option>
-                       <option value="Remote">Remote</option>
-                  </select>
-             </div>
+  <div className="col-md-3">
+    <select
+      className="form-select"
+      value={jobTypeFilter}
+      onChange={(event) => setJobTypeFilter(event.target.value)}
+    >
+      <option value="">All Job Types</option>
+      <option value="Full-time">Full-time</option>
+      <option value="Part-time">Part-time</option>
+      <option value="Internship">Internship</option>
+      <option value="Contract">Contract</option>
+      <option value="Remote">Remote</option>
+    </select>
+  </div>
 
-             <div className="mb-4">
-  <select
-    className="form-select"
-    value={sortOrder}
-    onChange={(event) => setSortOrder(event.target.value)}
-  >
-    <option value="newest">Newest First</option>
-    <option value="oldest">Oldest First</option>
-  </select>
+  <div className="col-md-2">
+    <select
+      className="form-select"
+      value={sortOrder}
+      onChange={(event) => setSortOrder(event.target.value)}
+    >
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+    </select>
+  </div>
 </div>
 
 
 
+
        {filteredJobs.length === 0 ? (
-        <div className="alert alert-info">
-          No job applications found. Add your first job.
-        </div>
-       ) : (
+          <div className="card border-0 shadow-sm p-4 text-center">
+            <h5 className="mb-2">No matching job applications</h5>
+            <p className="text-muted mb-3">
+             Try changing your search or filters, or add a new job application.
+           </p>
+             <a href="/jobs/add" className="btn btn-primary">
+               Add Job
+            </a>
+         </div>
+         ) : (
+
         <div className="row">
           {filteredJobs.map((job) => (
             <div className="col-md-6 mb-3" key={job._id}>
               <div className="card h-100 shadow-sm">
                 <div className="card-body">
-                  <h5 className="card-title">{job.company}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">{job.role}</h6>
+                  <h5 className="card-title mb-1">{job.company}</h5>
+                  <h6 className="card-subtitle text-muted mb-3">{job.role}</h6>
 
-                  <p className="mb-1">
+                  <p className="mb-2">
                     <strong>Status:</strong> {job.status}
                   </p>
 
-                  <p className="mb-1">
+                  <p className="mb-2">
                     <strong>Type:</strong> {job.jobType}
                   </p>
 
-                  <p className="mb-1">
+                  <p className="mb-2">
                     <strong>Location:</strong> {job.location || "Not added"}
                   </p>
 
-                  <p className="mb-1">
+                  <p className="mb-3">
                     <strong>Source:</strong> {job.source || "Not added"}
                   </p>
 
