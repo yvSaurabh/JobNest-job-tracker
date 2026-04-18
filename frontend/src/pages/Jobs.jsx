@@ -7,6 +7,10 @@ const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [jobTypeFilter, setJobTypeFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -42,6 +46,30 @@ const Jobs = () => {
     }
   };
 
+  const filteredJobs = jobs
+    .filter((job) => {
+      const search = searchTerm.toLowerCase();
+
+      const matchesSearch =
+        job.company.toLowerCase().includes(search) ||
+        job.role.toLowerCase().includes(search);
+
+      const matchesStatus =
+        statusFilter === "" || job.status === statusFilter;
+
+      const matchesJobType =
+        jobTypeFilter === "" || job.jobType === jobTypeFilter;
+
+      return matchesSearch && matchesStatus && matchesJobType;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "newest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    });
+
   if (loading) {
     return <div className="container mt-4">Loading jobs...</div>;
   }
@@ -52,20 +80,73 @@ const Jobs = () => {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Your Job Applications</h2>
-        <a href="/jobs/add" className="btn btn-primary">
-          Add Job
-        </a>
-      </div>
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <h2>Your Job Applications</h2>
+            <a href="/jobs/add" className="btn btn-primary">
+              Add Job
+           </a>
+       </div>
 
-      {jobs.length === 0 ? (
+       <div className="mb-4">
+         <input
+           type="text"
+           className="form-control"
+           placeholder="Search by company or role..."
+           value={searchTerm}
+           onChange={(event) => setSearchTerm(event.target.value)}
+          />
+       </div>
+
+       <div className="mb-4">
+             <select
+                className="form-select"
+                value={statusFilter}
+                onChange={(event) => setStatusFilter(event.target.value)}
+              >
+              <option value="">All Statuses</option>
+              <option value="Applied">Applied</option>
+              <option value="Shortlisted">Shortlisted</option>
+              <option value="Interview">Interview</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+           </select>
+       </div>
+
+              <div className="mb-4">
+                   <select
+                       className="form-select"
+                       value={jobTypeFilter}
+                       onChange={(event) => setJobTypeFilter(event.target.value)}
+                    >
+                       <option value="">All Job Types</option>
+                       <option value="Full-time">Full-time</option>
+                       <option value="Part-time">Part-time</option>
+                       <option value="Internship">Internship</option>
+                       <option value="Contract">Contract</option>
+                       <option value="Remote">Remote</option>
+                  </select>
+             </div>
+
+             <div className="mb-4">
+  <select
+    className="form-select"
+    value={sortOrder}
+    onChange={(event) => setSortOrder(event.target.value)}
+  >
+    <option value="newest">Newest First</option>
+    <option value="oldest">Oldest First</option>
+  </select>
+</div>
+
+
+
+       {filteredJobs.length === 0 ? (
         <div className="alert alert-info">
           No job applications found. Add your first job.
         </div>
-      ) : (
+       ) : (
         <div className="row">
-          {jobs.map((job) => (
+          {filteredJobs.map((job) => (
             <div className="col-md-6 mb-3" key={job._id}>
               <div className="card h-100 shadow-sm">
                 <div className="card-body">
