@@ -28,6 +28,12 @@ const Register = () => {
     setError("");
     setLoading(true);
 
+    if(!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
+      setError("All fields are required.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post("/auth/register", formData);
       login(response.data.data);

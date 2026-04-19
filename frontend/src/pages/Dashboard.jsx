@@ -37,7 +37,11 @@ const Dashboard = () => {
   }, []);
 
   if (loading) {
-    return <div className="container mt-4">Loading dashboard...</div>;
+    return (
+    <div className="container mt-4">
+      <div className="alert alert-secondary">Loading your job applications...</div>
+    </div>
+    );
   }
 
   if (error) {

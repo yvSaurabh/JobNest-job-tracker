@@ -63,6 +63,12 @@ const EditJob = () => {
     setError("");
     setLoading(true);
 
+    if(!formData.company.trim() || !formData.role.trim()) {
+      setError("company and Role are required ");
+      setLoading(false);
+      return;
+    }
+
     try {
         await api.put(`/jobs/${id}`, formData);
         navigate("/jobs");
@@ -74,8 +80,13 @@ const EditJob = () => {
   };
 
   if (loading) {
-    return <div className="container mt-4">Loading job details...</div>;
-  }
+  return (
+    <div className="container mt-4">
+      <div className="alert alert-secondary">Loading job details...</div>
+    </div>
+  );
+}
+
 
   if (error) {
     return <div className="container mt-4 alert alert-danger">{error}</div>;

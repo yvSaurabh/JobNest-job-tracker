@@ -9,7 +9,7 @@ const registerUser = async(req, res) => {
         if(!name || !email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Please fill in all fields",
+                message: "Name, email, and password are required ",
             });
         }
         const userExists = await User.findOne({ email});
@@ -58,7 +58,7 @@ const loginUser = async(req, res) => {
         if(!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Please fill in all fields",
+                message: "Email and Password are required fields",
             });
         }
         const user = await User.findOne({email});
@@ -90,7 +90,7 @@ const loginUser = async(req, res) => {
   } catch(error) {
     res.status(500).json({
         success: false,
-        message: "server eror while logging in user",
+        message: "Server error while logging in user",
         error: error.message,
     });
 }

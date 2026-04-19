@@ -34,6 +34,12 @@ const AddJob = () => {
     setError("");
     setLoading(true);
 
+    if(!formData.company.trim() || !formData.role.trim()) {
+      setError("Company and Role are required fields.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await api.post("/jobs", formData);
       navigate("/jobs");

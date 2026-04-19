@@ -27,6 +27,12 @@ const Login = () => {
     setError("");
     setLoading(true);
 
+    if(!formData.email.trim() || !formData.password.trim()) {
+      setError("Email and Password are required fields.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post("/auth/login", formData);
       login(response.data.data);
