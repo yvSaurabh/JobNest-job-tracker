@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import useAuth from "../context/useAuth";
 
@@ -48,55 +48,122 @@ const Register = () => {
   };
 
   return (
-    <div className="container py-5" style={{ maxWidth: "520px" }}>
-      <div className="mb-4 text-center">
-       <h2 className="mb-2">Create Your Account</h2>
-        <p className="text-muted mb-0">Start tracking your job applications in one place.</p>
-     </div>
+    <div className="container py-4 auth-page" style={{ maxWidth: "1100px" }}>
+      <div className="auth-shell auth-shell-register">
+        <div className="auth-panel auth-panel-brand">
+          <span className="auth-kicker">Welcome To JobNest</span>
+          <h1 className="auth-brand-title">Build your job search system in one place.</h1>
+          <p className="auth-brand-copy">
+            Register once, track every application, and keep your progress,
+            links, and deadlines organized from day one.
+          </p>
 
-      <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        <div className="mb-3">
-          <label className="form-label">Full Name</label>
-          <input
-            type="text"
-            name="name"
-            className="form-control"
-            placeholder="Enter your full name"
-            value={formData.name}
-            onChange={handleChange}
-          />
+          <div className="auth-feature-list">
+            <div className="auth-feature-card">
+              <span className="auth-feature-number">01</span>
+              <div>
+                <h3 className="auth-feature-title">Track Every Stage</h3>
+                <p className="auth-feature-copy">
+                  Follow your applications from applied to offer with clear status views.
+                </p>
+              </div>
+            </div>
+            <div className="auth-feature-card">
+              <span className="auth-feature-number">02</span>
+              <div>
+                <h3 className="auth-feature-title">Stay Deadline Ready</h3>
+                <p className="auth-feature-copy">
+                  Keep important dates, source links, and notes together.
+                </p>
+              </div>
+            </div>
+            <div className="auth-feature-card">
+              <span className="auth-feature-number">03</span>
+              <div>
+                <h3 className="auth-feature-title">See Your Progress</h3>
+                <p className="auth-feature-copy">
+                  Use dashboard insights to understand your response flow over time.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Email Address</label>
-          <input
-            type="email"
-            name="email"
-            className="form-control"
-            placeholder="Enter your email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
+        <div className="auth-panel auth-panel-form">
+          <div className="auth-form-header">
+            <span className="auth-form-chip">Create Account</span>
+            <h2 className="auth-form-title">Join JobNest</h2>
+            <p className="auth-form-subtitle">
+              Start managing your applications with a cleaner workflow.
+            </p>
+          </div>
 
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            name="password"
-            className="form-control"
-            placeholder="Enter your password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
+          <form onSubmit={handleSubmit} className="auth-form">
+            {error && <div className="alert alert-danger">{error}</div>}
 
-        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
+            <div className="auth-field">
+              <label className="form-label auth-label">
+                Full Name <span className="auth-required">*</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="form-control auth-input"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="auth-field">
+              <label className="form-label auth-label">
+                Email Address <span className="auth-required">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                className="form-control auth-input"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="auth-field">
+              <label className="form-label auth-label">
+                Password <span className="auth-required">*</span>
+              </label>
+              <input
+                type="password"
+                name="password"
+                className="form-control auth-input"
+                placeholder="Create a secure password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <span className="auth-field-hint">Use at least one strong password you can remember.</span>
+            </div>
+
+            <button
+              type="submit"
+              className="btn jobnest-nav-btn jobnest-nav-btn-primary w-100 auth-submit-btn"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Create Account"}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            <span className="auth-footer-text">Already have an account?</span>
+            <Link to="/login" className="auth-footer-link">
+              Sign in
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

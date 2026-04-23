@@ -88,7 +88,7 @@ const getJobById = async (req, res) =>{
         }
         res.status(200).json({
             success: true,
-            message: "job fetched successfully",
+            message: "Job fetched successfully",
             data: job,
         });
     } catch(error) {

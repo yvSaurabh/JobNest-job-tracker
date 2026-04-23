@@ -25,7 +25,11 @@ const JobDetails = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="container mt-4">Loading job details...</div>;
+    return (
+      <div className="container mt-4">
+        <div className="alert alert-secondary">Loading job details...</div>
+      </div>
+    );
   }
 
   if (error) {
@@ -33,58 +37,75 @@ const JobDetails = () => {
   }
 
   return (
-    <div className="container mt-4" style={{ maxWidth: "800px" }}>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>{job.company}</h2>
-        <Link to="/jobs" className="btn btn-secondary">
+    <div className="container py-4" style={{ maxWidth: "860px" }}>
+      <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+        <div className="job-details-header-copy">
+          <h2 className="mb-1 job-details-title">{job.company}</h2>
+          <p className="job-details-subtitle mb-0">{job.role}</p>
+        </div>
+        <Link to="/jobs" className="btn jobnest-nav-btn jobnest-nav-btn-outline">
           Back to Jobs
         </Link>
       </div>
 
-      <div className="card p-4 shadow-sm">
-        <p>
-          <strong>Role:</strong> {job.role}
-        </p>
-        <p>
-          <strong>Status:</strong> {job.status}
-        </p>
-        <p>
-          <strong>Job Type:</strong> {job.jobType}
-        </p>
-        <p>
-          <strong>Location:</strong> {job.location || "Not added"}
-        </p>
-        <p>
-          <strong>Salary:</strong> {job.salary || "Not added"}
-        </p>
-        <p>
-          <strong>Source:</strong> {job.source || "Not added"}
-        </p>
-        <p>
-          <strong>Applied Date:</strong>{" "}
-          {job.appliedDate ? job.appliedDate.split("T")[0] : "Not added"}
-        </p>
-        <p>
-          <strong>Deadline:</strong>{" "}
-          {job.deadline ? job.deadline.split("T")[0] : "Not added"}
-        </p>
-        <p>
-          <strong>Notes:</strong> {job.notes || "No notes added"}
-        </p>
+      <div className="card border-0 job-details-card">
+        <div className="card-body px-4 py-3 px-md-5 py-md-4">
+          <div className="job-details-grid">
+            <div className="job-details-item">
+              <span className="job-details-label">Status</span>
+              <span className="job-details-value">{job.status}</span>
+            </div>
+            <div className="job-details-item">
+              <span className="job-details-label">Job Type</span>
+              <span className="job-details-value">{job.jobType}</span>
+            </div>
+            <div className="job-details-item">
+              <span className="job-details-label">Location</span>
+              <span className="job-details-value">{job.location || "Not added"}</span>
+            </div>
+            <div className="job-details-item">
+              <span className="job-details-label">Salary</span>
+              <span className="job-details-value">{job.salary || "Not added"}</span>
+            </div>
+            <div className="job-details-item">
+              <span className="job-details-label">Source</span>
+              <span className="job-details-value">{job.source || "Not added"}</span>
+            </div>
+            <div className="job-details-item">
+              <span className="job-details-label">Applied Date</span>
+              <span className="job-details-value">
+                {job.appliedDate ? job.appliedDate.split("T")[0] : "Not added"}
+              </span>
+            </div>
+            <div className="job-details-item">
+              <span className="job-details-label">Deadline</span>
+              <span className="job-details-value">
+                {job.deadline ? job.deadline.split("T")[0] : "Not added"}
+              </span>
+            </div>
+          </div>
 
-        <div className="mt-3">
+          <div className="job-details-notes">
+            <span className="job-details-label">Notes</span>
+            <p className="job-details-notes-text mb-0">
+              {job.notes || "No notes added"}
+            </p>
+          </div>
+
+          <div className="job-details-actions">
           {job.jobLink ? (
             <a
               href={job.jobLink}
               target="_blank"
               rel="noreferrer"
-              className="btn btn-outline-primary"
+              className="btn jobnest-nav-btn jobnest-nav-btn-primary"
             >
               Open Job Link
             </a>
           ) : (
             <span className="text-muted">No job link added</span>
           )}
+          </div>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import Jobs from "./pages/Jobs";
 import AddJob from "./pages/AddJob";
 import EditJob from "./pages/EditJob";
 import JobDetails from "./pages/JobDetails";
+import HowItWorks from "./pages/HowItWorks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import useAuth from "./context/useAuth";
 
@@ -20,45 +21,54 @@ const AppLayout = () => {
 
   return (
     <>
-         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom px-3 py-3">
-             <div className="container-fluid d-flex flex-wrap gap-2 align-items-center">
-                <Link to="/" className="navbar-brand fw-bold text-primary">
-                   JobNest
+      <nav className="navbar navbar-expand-lg px-3 py-3 jobnest-navbar">
+        <div className="container-fluid d-flex flex-wrap justify-content-between gap-2 align-items-center">
+          <Link to="/" className="navbar-brand fw-bold jobnest-navbar-brand">
+            <span className="jobnest-logo-mark" aria-hidden="true">
+              JN
+            </span>
+            JobNest
+          </Link>
+
+          <div className="d-flex flex-wrap gap-2 align-items-center jobnest-navbar-actions">
+            <Link to="/" className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-outline">
+              Dashboard
+            </Link>
+
+            <Link to="/jobs" className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-outline">
+              Jobs
+            </Link>
+
+            <Link to="/how-it-works" className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-guide">
+              How It Works
+            </Link>
+
+            <Link to="/jobs/add" className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-primary">
+              Add Job
+            </Link>
+
+            {!user ? (
+              <>
+                <Link to="/login" className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-outline">
+                  Login
                 </Link>
-
-               <div className="d-flex flex-wrap gap-2 align-items-center">
-                  <Link to="/" className="btn btn-outline-primary btn-sm">
-                    Dashboard
-                 </Link>
-
-                 <Link to="/jobs" className="btn btn-outline-secondary btn-sm">
-                    Jobs
-                 </Link>
-
-                 <Link to="/jobs/add" className="btn btn-primary btn-sm">
-                   Add Job
-                 </Link>
-
-                  {!user ? (
-                <>
-                 <Link to="/login" className="btn btn-outline-success btn-sm">
-                    Login
-                  </Link>
-                  <Link to="/register" className="btn btn-success btn-sm">
-                    Register
-                 </Link>
-               </>
+                <Link to="/register" className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-success">
+                  Register
+                </Link>
+              </>
             ) : (
-        <button onClick={handleLogout} className="btn btn-danger btn-sm">
-          Logout
-        </button>
-      )}
-    </div>
-  </div>
-</nav>
+              <button
+                onClick={handleLogout}
+                className="btn btn-sm jobnest-nav-btn jobnest-nav-btn-danger"
+              >
+                Logout
+              </button>
+            )}
+          </div>
+        </div>
+      </nav>
 
-
-      <main style={{ padding: "16px" }}>
+      <main className="jobnest-main-content">
         <Routes>
           <Route
             path="/"
@@ -100,6 +110,7 @@ const AppLayout = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

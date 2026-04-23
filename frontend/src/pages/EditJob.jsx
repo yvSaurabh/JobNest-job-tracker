@@ -64,7 +64,7 @@ const EditJob = () => {
     setLoading(true);
 
     if(!formData.company.trim() || !formData.role.trim()) {
-      setError("company and Role are required ");
+      setError("Company and role are required.");
       setLoading(false);
       return;
     }
