@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-
-const protect = async (req, res, next) =>{
+const protect = async (req, res, next) => {
     try {
         let token;
 
@@ -16,26 +15,40 @@ const protect = async (req, res, next) =>{
         if(!token) {
             return res.status(401).json({
                 success: false, 
-                message: "Not authorized",
+                message: "Not authorized to access this route",
             });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.user = await User.findById(decoded.id).select("-password");
 
-        req.user = await User.findById(decoded.id).select("-password");
-
-        if(!req.user){
-            return res.status(401).json({
-                success: false,
-                message: "User not found",
-            });
+            if(!req.user){
+                return res.status(401).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+            next();
+        } catch (jwtError) {
+            if (jwtError.name === 'TokenExpiredError') {
+                return res.status(401).json({
+                    success: false,
+                    message: "Token has expired",
+                });
+            } else if (jwtError.name === 'JsonWebTokenError') {
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid token",
+                });
+            }
+            throw jwtError;
         }
-        next();
     } catch (error) {
+        console.error("Auth middleware error:", error);
         res.status(401).json({
             success: false,
-            message: "Not authorized",
-            error: error.message,
+            message: "Not authorized to access this route",
         });
     }
 };

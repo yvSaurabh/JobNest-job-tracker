@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 
+const normalizeStatus = (status) =>
+  typeof status === "string" ? status.trim().toLowerCase() : "";
+const formatStatusLabel = (status) => {
+  const normalizedStatus = normalizeStatus(status);
+  return normalizedStatus
+    ? normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1)
+    : "Unknown";
+};
+
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,7 +63,7 @@ const Jobs = () => {
         job.role.toLowerCase().includes(search);
 
       const matchesStatus =
-        statusFilter === "" || job.status === statusFilter;
+        statusFilter === "" || normalizeStatus(job.status) === statusFilter;
 
       const matchesJobType =
         jobTypeFilter === "" || job.jobType === jobTypeFilter;
@@ -71,27 +80,27 @@ const Jobs = () => {
 
   const getStatusStyles = (status) => {
     const styles = {
-      Applied: {
+      applied: {
         backgroundColor: "#2563eb",
         color: "#ffffff",
         borderColor: "#2563eb",
       },
-      Shortlisted: {
+      shortlisted: {
         backgroundColor: "#0891b2",
         color: "#ffffff",
         borderColor: "#0891b2",
       },
-      Interview: {
+      interview: {
         backgroundColor: "#d97706",
         color: "#ffffff",
         borderColor: "#d97706",
       },
-      Offer: {
+      offer: {
         backgroundColor: "#16a34a",
         color: "#ffffff",
         borderColor: "#16a34a",
       },
-      Rejected: {
+      rejected: {
         backgroundColor: "#dc2626",
         color: "#ffffff",
         borderColor: "#dc2626",
@@ -99,7 +108,7 @@ const Jobs = () => {
     };
 
     return (
-      styles[status] || {
+      styles[normalizeStatus(status)] || {
         backgroundColor: "#475569",
         color: "#ffffff",
         borderColor: "#475569",
@@ -109,27 +118,27 @@ const Jobs = () => {
 
   const getCardStatusStyles = (status) => {
     const styles = {
-      Applied: {
+      applied: {
         backgroundColor: "#dbeafe",
         borderColor: "rgba(37, 99, 235, 0.24)",
         boxShadow: "0 18px 36px rgba(37, 99, 235, 0.14)",
       },
-      Shortlisted: {
+      shortlisted: {
         backgroundColor: "#cffafe",
         borderColor: "rgba(13, 148, 136, 0.24)",
         boxShadow: "0 18px 36px rgba(13, 148, 136, 0.14)",
       },
-      Interview: {
+      interview: {
         backgroundColor: "#fde68a",
         borderColor: "rgba(217, 119, 6, 0.24)",
         boxShadow: "0 18px 36px rgba(217, 119, 6, 0.14)",
       },
-      Offer: {
+      offer: {
         backgroundColor: "#bbf7d0",
         borderColor: "rgba(22, 163, 74, 0.24)",
         boxShadow: "0 18px 36px rgba(22, 163, 74, 0.14)",
       },
-      Rejected: {
+      rejected: {
         backgroundColor: "#fecaca",
         borderColor: "rgba(220, 38, 38, 0.24)",
         boxShadow: "0 18px 36px rgba(220, 38, 38, 0.14)",
@@ -137,7 +146,7 @@ const Jobs = () => {
     };
 
     return (
-      styles[status] || {
+      styles[normalizeStatus(status)] || {
         backgroundColor: "#e2e8f0",
         borderColor: "rgba(148, 163, 184, 0.2)",
         boxShadow: "0 16px 32px rgba(15, 23, 42, 0.12)",
@@ -216,11 +225,11 @@ const Jobs = () => {
             onChange={(event) => setStatusFilter(event.target.value)}
           >
             <option value="">All Statuses</option>
-            <option value="Applied">Applied</option>
-            <option value="Shortlisted">Shortlisted</option>
-            <option value="Interview">Interview</option>
-            <option value="Offer">Offer</option>
-            <option value="Rejected">Rejected</option>
+            <option value="applied">Applied</option>
+            <option value="shortlisted">Shortlisted</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
 
@@ -279,7 +288,7 @@ const Jobs = () => {
                       className="jobs-status-badge"
                       style={getStatusStyles(job.status)}
                     >
-                      {job.status}
+                      {formatStatusLabel(job.status)}
                     </span>
                   </div>
 

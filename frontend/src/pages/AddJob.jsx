@@ -10,7 +10,7 @@ const AddJob = () => {
     role: "",
     location: "",
     jobType: "Full-time",
-    status: "Applied",
+    status: "applied",
     jobLink: "",
     appliedDate: "",
     deadline: "",
@@ -134,11 +134,11 @@ const AddJob = () => {
                     value={formData.jobType}
                     onChange={handleChange}
                   >
-                    <option>Full-time</option>
-                    <option>Part-time</option>
-                    <option>Internship</option>
-                    <option>Contract</option>
-                    <option>Remote</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Remote">Remote</option>
                   </select>
                 </div>
               </div>
@@ -152,11 +152,11 @@ const AddJob = () => {
                     value={formData.status}
                     onChange={handleChange}
                   >
-                    <option>Applied</option>
-                    <option>Shortlisted</option>
-                    <option>Interview</option>
-                    <option>Offer</option>
-                    <option>Rejected</option>
+                    <option value="applied">Applied</option>
+                    <option value="shortlisted">Shortlisted</option>
+                    <option value="interview">Interview</option>
+                    <option value="offer">Offer</option>
+                    <option value="rejected">Rejected</option>
                   </select>
                 </div>
               </div>

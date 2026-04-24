@@ -8,6 +8,7 @@ import EditJob from "./pages/EditJob";
 import JobDetails from "./pages/JobDetails";
 import HowItWorks from "./pages/HowItWorks";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 import useAuth from "./context/useAuth";
 
 const AppLayout = () => {
@@ -121,9 +122,11 @@ const AppLayout = () => {
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <AppLayout />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AppLayout />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 };
 

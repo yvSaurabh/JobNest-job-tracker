@@ -36,6 +36,14 @@ const DashboardChartTooltip = ({ active, payload, label }) => {
 };
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const normalizeStatus = (status) =>
+  typeof status === "string" ? status.trim().toLowerCase() : "";
+const formatStatusLabel = (status) => {
+  const normalizedStatus = normalizeStatus(status);
+  return normalizedStatus
+    ? normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1)
+    : "Unknown";
+};
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -216,7 +224,7 @@ const Dashboard = () => {
 
   const recent45DayCount = recent45DayJobs.length;
   const recent45DayProgressCount = recent45DayJobs.filter((job) =>
-    ["Shortlisted", "Interview", "Offer"].includes(job.status)
+    ["shortlisted", "interview", "offer"].includes(normalizeStatus(job.status))
   ).length;
   const recent45DayResponseRate = recent45DayCount
     ? Math.round((recent45DayProgressCount / recent45DayCount) * 100)
@@ -232,30 +240,30 @@ const Dashboard = () => {
 
   const getStatusStyles = (status) => {
     const styles = {
-      Applied: {
+      applied: {
         backgroundColor: "#dbeafe",
         color: "#1d4ed8",
       },
-      Shortlisted: {
+      shortlisted: {
         backgroundColor: "#cffafe",
         color: "#0f766e",
       },
-      Interview: {
+      interview: {
         backgroundColor: "#fde68a",
         color: "#92400e",
       },
-      Offer: {
+      offer: {
         backgroundColor: "#bbf7d0",
         color: "#166534",
       },
-      Rejected: {
+      rejected: {
         backgroundColor: "#fecaca",
         color: "#991b1b",
       },
     };
 
     return (
-      styles[status] || {
+      styles[normalizeStatus(status)] || {
         backgroundColor: "#e5e7eb",
         color: "#374151",
       }
@@ -493,7 +501,7 @@ const Dashboard = () => {
                           className="dashboard-status-badge"
                           style={getStatusStyles(job.status)}
                         >
-                          {job.status}
+                          {formatStatusLabel(job.status)}
                         </span>
                       </td>
                       <td className="text-muted">{job.source || "Not added"}</td>

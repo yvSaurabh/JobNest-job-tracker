@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../services/api";
 
+const normalizeStatus = (status) =>
+  typeof status === "string" ? status.trim().toLowerCase() : "";
+const formatStatusLabel = (status) => {
+  const normalizedStatus = normalizeStatus(status);
+  return normalizedStatus
+    ? normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1)
+    : "Unknown";
+};
+
 const JobDetails = () => {
   const { id } = useParams();
 
@@ -53,7 +62,7 @@ const JobDetails = () => {
           <div className="job-details-grid">
             <div className="job-details-item">
               <span className="job-details-label">Status</span>
-              <span className="job-details-value">{job.status}</span>
+              <span className="job-details-value">{formatStatusLabel(job.status)}</span>
             </div>
             <div className="job-details-item">
               <span className="job-details-label">Job Type</span>

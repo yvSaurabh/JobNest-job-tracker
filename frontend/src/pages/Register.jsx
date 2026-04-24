@@ -14,13 +14,43 @@ const Register = () => {
   });
 
   const [error, setError] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Password strength validation helper
+  const checkPasswordStrength = (password) => {
+    if (!password) return null;
+
+    const checks = {
+      minLength: password.length >= 8,
+      hasUpperCase: /[A-Z]/.test(password),
+      hasLowerCase: /[a-z]/.test(password),
+      hasNumbers: /\d/.test(password),
+    };
+
+    const passedChecks = Object.values(checks).filter(Boolean).length;
+    
+    if (passedChecks === 4) {
+      return { strength: "strong", color: "success", message: "Strong password ✓" };
+    } else if (passedChecks >= 3) {
+      return { strength: "good", color: "info", message: "Good password" };
+    } else if (passedChecks >= 2) {
+      return { strength: "fair", color: "warning", message: "Fair password" };
+    } else {
+      return { strength: "weak", color: "danger", message: "Weak password" };
+    }
+  };
+
   const handleChange = (event) => {
+    const { name, value } = event.target;
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
+
+    if (name === "password") {
+      setPasswordStrength(checkPasswordStrength(value));
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -30,6 +60,12 @@ const Register = () => {
 
     if(!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
       setError("All fields are required.");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.name.trim().length < 2) {
+      setError("Name must be at least 2 characters long.");
       setLoading(false);
       return;
     }
@@ -144,7 +180,18 @@ const Register = () => {
                 onChange={handleChange}
                 required
               />
-              <span className="auth-field-hint">Use at least one strong password you can remember.</span>
+              {passwordStrength && (
+                <div className={`alert alert-${passwordStrength.color} py-2 mt-2 mb-0`} style={{ fontSize: "0.85rem" }}>
+                  {passwordStrength.message}
+                  <div style={{ fontSize: "0.75rem", marginTop: "0.25rem" }}>
+                    • Min 8 characters: {formData.password.length >= 8 ? "✓" : "✗"}<br />
+                    • Uppercase letter: {/[A-Z]/.test(formData.password) ? "✓" : "✗"}<br />
+                    • Lowercase letter: {/[a-z]/.test(formData.password) ? "✓" : "✗"}<br />
+                    • Number: {/\d/.test(formData.password) ? "✓" : "✗"}
+                  </div>
+                </div>
+              )}
+              <span className="auth-field-hint">Password must be at least 8 characters with uppercase, lowercase, and number.</span>
             </div>
 
             <button

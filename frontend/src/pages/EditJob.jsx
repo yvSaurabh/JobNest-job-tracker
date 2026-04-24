@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 
+const normalizeStatus = (status) =>
+  typeof status === "string" ? status.trim().toLowerCase() : "";
+
 const EditJob = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -10,7 +13,7 @@ const EditJob = () => {
     role: "",
     location: "",
     jobType: "Full-time",
-    status: "Applied",
+    status: "applied",
     jobLink: "",
     appliedDate: "",
     deadline: "",
@@ -33,7 +36,7 @@ const EditJob = () => {
           role: job.role || "",
           location: job.location || "",
           jobType: job.jobType || "Full-time",
-          status: job.status || "Applied",
+          status: normalizeStatus(job.status) || "applied",
           jobLink: job.jobLink || "",
           appliedDate: job.appliedDate ? job.appliedDate.split("T")[0] : "",
           deadline: job.deadline ? job.deadline.split("T")[0] : "",
@@ -138,11 +141,11 @@ const EditJob = () => {
             value={formData.jobType}
             onChange={handleChange}
           >
-            <option>Full-time</option>
-            <option>Part-time</option>
-            <option>Internship</option>
-            <option>Contract</option>
-            <option>Remote</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Internship">Internship</option>
+            <option value="Contract">Contract</option>
+            <option value="Remote">Remote</option>
           </select>
         </div>
 
@@ -154,11 +157,11 @@ const EditJob = () => {
             value={formData.status}
             onChange={handleChange}
           >
-            <option>Applied</option>
-            <option>Shortlisted</option>
-            <option>Interview</option>
-            <option>Offer</option>
-            <option>Rejected</option>
+            <option value="applied">Applied</option>
+            <option value="shortlisted">Shortlisted</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
 
