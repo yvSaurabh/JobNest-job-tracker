@@ -1,252 +1,189 @@
 # Deployment Guide
 
-## Prerequisites
+This repo is set up as a small monorepo:
 
-- GitHub account (for version control)
-- MongoDB Atlas account (cloud database)
-- Render account (backend deployment)
-- Vercel or Netlify account (frontend deployment)
+- `backend/` -> Express API for Render
+- `frontend/` -> Vite React app for Vercel
 
----
+The deployment-ready files are already in the repo:
 
-## Step 1: MongoDB Atlas Setup
+- `render.yaml` for a Render backend Blueprint
+- `frontend/vercel.json` for SPA deep-link rewrites on Vercel
+- `frontend/.env.production.example` for the frontend API URL
 
-### 1.1 Create a Cluster
-1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Sign in or create account
-3. Click "Create Deployment" → Choose "Free" tier
-4. Select AWS and your region
-5. Click "Create"
+## Recommended Order
 
-### 1.2 Setup Network Access
-1. Go to "Network Access"
-2. Click "Add IP Address"
-3. Select "Allow Access from Anywhere" (for development) or add specific IPs
-4. Click "Confirm"
+Deploy in this order to avoid the frontend/backend URL circular dependency:
 
-### 1.3 Create Database User
-1. Go to "Database Access"
-2. Click "Add New Database User"
-3. Set username and password
-4. Click "Create User"
+1. Create MongoDB Atlas and get the connection string.
+2. Deploy the backend to Render and note the Render URL.
+3. Deploy the frontend to Vercel using the Render backend URL.
+4. Update Render `CLIENT_URL` to the final Vercel production URL.
+5. Redeploy the backend once.
 
-### 1.4 Get Connection String
-1. Go to "Databases"
-2. Click "Connect"
-3. Choose "Drivers"
-4. Copy the connection string
-5. Replace `<password>` and `<username>` with your credentials
+## Step 1: MongoDB Atlas
 
----
+1. Create a free MongoDB Atlas cluster.
+2. Create a database user.
+3. Add network access.
+4. Copy your connection string.
 
-## Step 2: Backend Deployment (Render)
+Your final `MONGO_URI` should look like:
 
-### 2.1 Push to GitHub
-```bash
-cd jobnest
-git remote add origin https://github.com/YOUR_USERNAME/jobnest.git
-git branch -M main
-git push -u origin main
+```env
+MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster.mongodb.net/jobnest?retryWrites=true&w=majority
 ```
 
-### 2.2 Create Render Service
-1. Go to [Render.com](https://render.com)
-2. Sign in with GitHub
-3. Click "New" → "Web Service"
-4. Connect your repository
-5. Fill in details:
-   - **Name**: jobnest-backend
-   - **Environment**: Node
-   - **Build Command**: `npm install`
-   - **Start Command**: `node server.js`
-   - **Region**: Choose closest to users
+## Step 2: Backend on Render
 
-### 2.3 Set Environment Variables
-In Render dashboard, go to "Environment" and add:
+### Option A: Use `render.yaml` (recommended)
+
+1. Push the repo to GitHub.
+2. In Render, choose `New +` -> `Blueprint`.
+3. Select this repository.
+4. Render will detect [render.yaml](C:/Users/kpras/Jobnest/render.yaml).
+5. Create the service and then set these environment variables in Render:
+
+```env
+MONGO_URI=your_atlas_connection_string
+CLIENT_URL=https://your-frontend-project.vercel.app
 ```
-PORT=5000
+
+`JWT_SECRET` is generated automatically by the Blueprint. `NODE_ENV=production` is already defined there.
+
+### Option B: Create the service manually
+
+Use these settings:
+
+- Service type: `Web Service`
+- Runtime: `Node`
+- Root Directory: `backend`
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Health Check Path: `/api/health`
+
+Set these environment variables:
+
+```env
 NODE_ENV=production
-MONGO_URI=mongodb+srv://USER:PASS@cluster.mongodb.net/jobnest?retryWrites=true&w=majority
-JWT_SECRET=<GENERATE_STRONG_SECRET>
-CLIENT_URL=https://yourdomain.com
+MONGO_URI=your_atlas_connection_string
+JWT_SECRET=your_strong_secret
+CLIENT_URL=https://your-frontend-project.vercel.app
 ```
 
-### 2.4 Generate Strong JWT Secret
+After deploy, your backend URL will be something like:
+
+```text
+https://your-render-service.onrender.com
+```
+
+Test it:
+
 ```bash
-# On your machine, run:
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+curl https://your-render-service.onrender.com/api/health
 ```
 
-### 2.5 Deploy
-Click "Deploy" button. Wait for the build to complete (5-10 minutes).
+## Step 3: Frontend on Vercel
 
-**Backend URL**: `https://jobnest-backend.onrender.com`
+The frontend already reads `VITE_API_URL` from the environment in [frontend/src/services/api.js](C:/Users/kpras/Jobnest/frontend/src/services/api.js:4), so no source-code edit is needed.
 
----
+### Deploy through the dashboard
 
-## Step 3: Frontend Deployment (Vercel)
+1. Import the same GitHub repository into Vercel.
+2. Set the Root Directory to `frontend`.
+3. Add this environment variable:
 
-### 3.1 Update API URL
-Edit `frontend/src/services/api.js`:
-```javascript
-const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'https://jobnest-backend.onrender.com/api',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-});
+```env
+VITE_API_URL=https://your-render-service.onrender.com/api
 ```
 
-### 3.2 Create .env.production
-In frontend directory, create `.env.production`:
-```
-VITE_API_URL=https://jobnest-backend.onrender.com/api
-```
+4. Deploy.
 
-### 3.3 Deploy to Vercel
-1. Go to [Vercel.com](https://vercel.com)
-2. Click "New Project"
-3. Import your GitHub repository
-4. Select `frontend` as the root directory
-5. Add environment variables:
-   ```
-   VITE_API_URL=https://jobnest-backend.onrender.com/api
-   ```
-6. Click "Deploy"
+### Why `frontend/vercel.json` matters
 
-**Frontend URL**: `https://jobnest.vercel.app`
+This app uses `BrowserRouter`, so direct refreshes on routes like `/jobs` or `/register` need a rewrite to `index.html`. That is already configured in [frontend/vercel.json](C:/Users/kpras/Jobnest/frontend/vercel.json).
 
----
+After deploy, your frontend URL will be something like:
 
-## Step 4: Update CORS
-
-### 4.1 Backend CORS Update
-Update `backend/server.js`:
-```javascript
-const corsOptions = {
-    origin: 'https://jobnest.vercel.app',
-    credentials: true,
-    optionsSuccessStatus: 200,
-};
+```text
+https://your-project.vercel.app
 ```
 
-### 4.2 Redeploy Backend
-Push changes to GitHub, Render will auto-redeploy.
+## Step 4: Final CORS Update
 
----
+Once the frontend has a stable production URL:
 
-## Step 5: Custom Domain (Optional)
+1. Go back to Render.
+2. Set:
 
-### 5.1 Frontend Custom Domain (Vercel)
-1. In Vercel, go to "Settings" → "Domains"
-2. Add your domain
-3. Update DNS records as instructed
-4. Wait for DNS propagation (24 hours)
+```env
+CLIENT_URL=https://your-project.vercel.app
+```
 
-### 5.2 Backend Custom Domain (Render)
-1. In Render, go to "Custom Domains"
-2. Add domain
-3. Update DNS CNAME record
-4. Verify domain
+3. Trigger a redeploy of the backend.
 
----
+This matches the backend CORS setup in [backend/server.js](C:/Users/kpras/Jobnest/backend/server.js:11).
 
-## Monitoring & Maintenance
+## Step 5: Pre-Deploy Checks
 
-### Logs
-- **Render Logs**: Dashboard → Logs tab
-- **Vercel Logs**: Dashboard → Logs tab
-- **MongoDB Logs**: Atlas → Monitoring tab
+Run these locally before pushing the final deploy commit:
 
-### Health Checks
 ```bash
-# Backend health
-curl https://jobnest-backend.onrender.com/api/health
-
-# Frontend check
-curl https://jobnest.vercel.app
+cd frontend
+npm run lint
+npm run build
 ```
 
-### Update Dependencies
-```bash
-npm outdated          # Check for updates
-npm update            # Update packages
-npm audit fix         # Fix security issues
-```
-
----
+The frontend build is already passing locally in this repo state.
 
 ## Troubleshooting
 
-### Backend not starting
-1. Check environment variables in Render
-2. Check MongoDB connection string
-3. View Render logs for errors
-4. Verify MongoDB IP whitelist includes Render IPs
+### Frontend loads, but refresh on `/jobs` gives 404
 
-### API calls failing
-1. Check CORS configuration
-2. Verify backend URL in frontend
-3. Check JWT token in browser DevTools
-4. View network tab for error details
+Make sure Vercel is deploying from the `frontend` directory and that [frontend/vercel.json](C:/Users/kpras/Jobnest/frontend/vercel.json) is included in the deployed commit.
 
-### Database connection issues
-1. Verify MongoDB connection string
-2. Check database user credentials
-3. Whitelist all IPs or add Render's IP
-4. Verify database name in connection string
+### Frontend can’t reach backend
 
-### Build failures
-1. Run `npm install` locally to check for errors
-2. Check build logs in Render/Vercel
-3. Ensure all environment variables are set
-4. Check for syntax errors
+Check:
 
----
+- `VITE_API_URL` in Vercel
+- backend Render URL ends with `/api`
+- backend health endpoint responds
 
-## Performance Tips
+### Backend returns CORS errors
 
-1. **Enable Compression**: Already enabled in Express
-2. **Use CDN**: Vercel includes automatic CDN
-3. **Monitor**: Use Render's monitoring dashboard
-4. **Scale**: Upgrade Render plan if needed
-5. **Database**: Add indexes to frequently queried fields
+Check:
 
----
+- `CLIENT_URL` in Render exactly matches the Vercel production URL
+- backend was redeployed after changing `CLIENT_URL`
 
-## Security Checklist
+### Backend fails to boot
 
-- ✅ Use HTTPS (automatic with Render & Vercel)
-- ✅ Strong JWT_SECRET generated
-- ✅ NODE_ENV set to production
-- ✅ CORS configured for production domain
-- ✅ MongoDB IP whitelist configured
-- ✅ Database user has strong password
-- ✅ Sensitive data in environment variables
-- ✅ No secrets in version control
+Check:
 
----
+- `MONGO_URI` is valid
+- Atlas network access allows incoming connections
+- Render logs show successful MongoDB connection
 
-## Rollback Process
+## Rollback
 
-If deployment has issues:
+### Render
 
-### For Backend (Render)
-1. Go to "Deployments" tab
-2. Click on previous deployment
-3. Click "Revert"
+1. Open the service.
+2. Open `Deployments`.
+3. Redeploy a previous successful version.
 
-### For Frontend (Vercel)
-1. Go to "Deployments" tab
-2. Click "..." on previous deployment
-3. Select "Promote to Production"
+### Vercel
 
----
+1. Open the project.
+2. Open `Deployments`.
+3. Promote a previous successful deployment to production.
 
-## Support
+## References
 
-- Render Documentation: https://render.com/docs
-- Vercel Documentation: https://vercel.com/docs
-- MongoDB Documentation: https://docs.mongodb.com
-
-For issues, check logs first, then create an issue on GitHub.
+- Render monorepo root directories: https://render.com/docs/monorepo-support
+- Render Blueprint spec: https://render.com/docs/blueprint-spec
+- Render web services: https://render.com/docs/web-services
+- Vercel monorepos: https://vercel.com/docs/monorepos
+- Vercel Vite SPA rewrites: https://vercel.com/docs/frameworks/frontend/vite
+- Vercel rewrites: https://vercel.com/docs/rewrites
