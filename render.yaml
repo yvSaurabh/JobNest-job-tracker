@@ -17,3 +17,16 @@ services:
         generateValue: true
       - key: CLIENT_URL
         value: https://jobnest-personal-job-application-tracker.onrender.com
+  - type: web
+    name: jobnest-personal-job-application-tracker
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://jobnest-backend-tssv.onrender.com/api

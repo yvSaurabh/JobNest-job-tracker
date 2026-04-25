@@ -9,6 +9,17 @@ dotenv.config();
 
 const app = express();
 
+const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
+const missingEnvVars = requiredEnvVars.filter((key) => {
+    const value = process.env[key];
+    return !value || value.trim() === '' || value.startsWith('your_');
+});
+
+if (missingEnvVars.length > 0) {
+    console.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+    process.exit(1);
+}
+
 const defaultAllowedOrigins = [
     'http://localhost:5173',
     'https://jobnest-personal-job-application-tracker.onrender.com',
@@ -71,15 +82,7 @@ app.use((req, res) => {
 });
 
 // Database connection
-if(
-    process.env.MONGO_URI &&
-    process.env.MONGO_URI !== "your_mongodb_connection_string_here"
-) {
-    connectDB();
-}else{
-    console.error("MongoDB connection string is not set. Please set MONGO_URI in your .env file.");
-    process.exit(1);
-}
+connectDB();
 
 const PORT = process.env.PORT || 5000;
 
