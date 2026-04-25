@@ -46,7 +46,7 @@ MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster.mongodb.net/jobnest?retryWrite
 
 ```env
 MONGO_URI=your_atlas_connection_string
-CLIENT_URL=https://your-frontend-project.vercel.app
+CLIENT_URL=https://jobnest-personal-job-application-tracker.onrender.com
 ```
 
 `JWT_SECRET` is generated automatically by the Blueprint. `NODE_ENV=production` is already defined there.
@@ -106,7 +106,7 @@ This app uses `BrowserRouter`, so direct refreshes on routes like `/jobs` or `/r
 After deploy, your frontend URL will be something like:
 
 ```text
-https://your-project.vercel.app
+https://jobnest-personal-job-application-tracker.onrender.com
 ```
 
 ## Step 4: Final CORS Update
@@ -117,7 +117,7 @@ Once the frontend has a stable production URL:
 2. Set:
 
 ```env
-CLIENT_URL=https://your-project.vercel.app
+CLIENT_URL=https://jobnest-personal-job-application-tracker.onrender.com
 ```
 
 3. Trigger a redeploy of the backend.

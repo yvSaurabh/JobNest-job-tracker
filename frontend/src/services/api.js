@@ -3,7 +3,7 @@ import axios from "axios";
 const LOCAL_API_URL = "http://localhost:5000/api";
 const PRODUCTION_API_URL = "https://jobnest-backend-tssv.onrender.com/api";
 
-// Vercel should set VITE_API_URL. The production fallback keeps deployed builds
+// Render should set VITE_API_URL. The production fallback keeps deployed builds
 // pointed at the Render API if the environment variable is missed.
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||

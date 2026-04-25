@@ -9,10 +9,19 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+const defaultAllowedOrigins = [
+    'http://localhost:5173',
+    'https://jobnest-personal-job-application-tracker.onrender.com',
+];
+
+const configuredAllowedOrigins = (process.env.CLIENT_URL || '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+
+const allowedOrigins = [
+    ...new Set([...defaultAllowedOrigins, ...configuredAllowedOrigins]),
+];
 
 // CORS configuration
 const corsOptions = {
