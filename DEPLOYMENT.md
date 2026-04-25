@@ -94,7 +94,7 @@ The frontend already reads `VITE_API_URL` from the environment in [frontend/src/
 3. Add this environment variable:
 
 ```env
-VITE_API_URL=https://your-render-service.onrender.com/api
+VITE_API_URL=https://jobnest-backend-tssv.onrender.com/api
 ```
 
 4. Deploy.
@@ -149,12 +149,14 @@ Check:
 - `VITE_API_URL` in Vercel
 - backend Render URL ends with `/api`
 - backend health endpoint responds
+- deployed frontend was rebuilt after changing `VITE_API_URL`
 
 ### Backend returns CORS errors
 
 Check:
 
 - `CLIENT_URL` in Render exactly matches the Vercel production URL
+- if you have preview and production frontends, set `CLIENT_URL` to a comma-separated list
 - backend was redeployed after changing `CLIENT_URL`
 
 ### Backend fails to boot

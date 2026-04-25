@@ -62,6 +62,19 @@
 
 body {
   margin: 0;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+svg {
+  max-width: 100%;
 }
 
 /* ✅ Better responsive container */
@@ -1383,6 +1396,42 @@ code {
   justify-content: flex-end;
 }
 
+.jobnest-menu-toggle,
+.jobnest-sidebar-close {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+  color: #1d4ed8;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.jobnest-menu-toggle:hover,
+.jobnest-sidebar-close:hover {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.jobnest-sidebar-backdrop,
+.jobnest-sidebar {
+  display: none;
+}
+
+.jobnest-sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .jobnest-main-content {
   padding: 16px 0;
 }
@@ -1472,7 +1521,124 @@ code {
   color: #ffffff;
 }
 
+@media (max-width: 992px) {
+  #root {
+    padding-inline: 12px;
+  }
+
+  .jobnest-navbar {
+    margin-inline: -12px;
+    width: calc(100% + 24px);
+  }
+
+  .jobnest-navbar .container-fluid {
+    align-items: center !important;
+  }
+
+  .jobnest-navbar-actions {
+    justify-content: flex-end;
+  }
+
+  .dashboard-chart-card .card-body,
+  .dashboard-recent-card .card-body {
+    padding: 1.25rem !important;
+  }
+}
+
 @media (max-width: 768px) {
+  #root {
+    border-inline: 0;
+  }
+
+  .container,
+  .container-fluid {
+    max-width: 100%;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .jobnest-main-content {
+    padding: 10px 0 18px;
+  }
+
+  .jobnest-navbar-brand {
+    font-size: 1.12rem;
+  }
+
+  .jobnest-logo-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .jobnest-navbar-actions {
+    display: none !important;
+  }
+
+  .jobnest-menu-toggle,
+  .jobnest-sidebar-close {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .jobnest-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    display: block;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0);
+    transition: background-color 0.2s ease;
+  }
+
+  .jobnest-sidebar-backdrop.is-open {
+    pointer-events: auto;
+    background: rgba(15, 23, 42, 0.36);
+  }
+
+  .jobnest-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    width: min(320px, calc(100vw - 32px));
+    height: 100svh;
+    padding: 1rem;
+    background: linear-gradient(180deg, #eff6ff 0%, #ffffff 56%, #ecfdf5 100%);
+    border-left: 1px solid rgba(37, 99, 235, 0.16);
+    box-shadow: -18px 0 40px rgba(15, 23, 42, 0.18);
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+  }
+
+  .jobnest-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .jobnest-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.12);
+  }
+
+  .jobnest-sidebar-actions {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1rem;
+  }
+
+  .jobnest-sidebar-actions .jobnest-nav-btn {
+    width: 100%;
+    min-height: 44px;
+    text-align: left;
+  }
+
   .how-hero,
   .how-content-grid,
   .how-steps-grid {
@@ -1501,8 +1667,21 @@ code {
     grid-template-columns: 1fr;
   }
 
+  .auth-brand-title {
+    font-size: 2rem;
+  }
+
+  .auth-shell {
+    border-radius: 20px;
+  }
+
   .add-job-hero {
     flex-direction: column;
+  }
+
+  .add-job-form-card {
+    border-radius: 18px;
+    transform: none;
   }
 
   .add-job-section {
@@ -1517,8 +1696,27 @@ code {
     grid-template-columns: 1fr;
   }
 
+  .dashboard-chart-header {
+    flex-direction: column;
+  }
+
+  .dashboard-donut-shell,
+  .dashboard-bar-shell,
+  .dashboard-chart-empty {
+    min-height: 240px;
+  }
+
+  .dashboard-donut-center {
+    width: 104px;
+    height: 104px;
+  }
+
   .dashboard-chart-legend-item {
     padding: 0.65rem 0.72rem;
+  }
+
+  .dashboard-recent-table {
+    min-width: 620px;
   }
 
   .job-details-card {
@@ -1537,11 +1735,183 @@ code {
     grid-template-columns: 1fr;
   }
 
-  .jobnest-navbar-actions {
+  .jobnest-nav-btn {
     width: 100%;
   }
 
+  .jobs-card:hover,
+  .dashboard-stat-card:hover,
+  .job-details-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    font-size: 15px;
+  }
+
+  #root {
+    padding-inline: 8px;
+  }
+
+  .jobnest-navbar {
+    margin-inline: -8px;
+    width: calc(100% + 16px);
+  }
+
+  .jobnest-navbar .container-fluid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .jobnest-navbar-actions {
+    display: none !important;
+  }
+
   .jobnest-nav-btn {
+    min-height: 40px;
+    padding: 0.42rem 0.55rem;
+    white-space: normal;
+  }
+
+  .dashboard-hero-copy,
+  .job-details-header-copy {
     width: 100%;
+  }
+
+  .dashboard-hero-copy + .d-flex,
+  .jobs-card-actions,
+  .how-hero-actions {
+    width: 100%;
+  }
+
+  .dashboard-hero-copy + .d-flex .btn,
+  .jobs-card-actions .btn,
+  .jobs-delete-btn,
+  .how-hero-actions .btn,
+  .add-job-back-btn,
+  .add-job-actions .btn {
+    width: 100%;
+  }
+
+  .dashboard-stat-card {
+    text-align: left;
+  }
+
+  .dashboard-chart-card,
+  .dashboard-recent-card,
+  .jobs-card,
+  .job-details-card,
+  .how-hero-copy,
+  .how-hero-panel,
+  .how-step-card,
+  .how-story-card {
+    border-radius: 14px;
+  }
+
+  .dashboard-chart-card .card-body,
+  .dashboard-recent-card .card-body,
+  .jobs-card-body,
+  .job-details-card .card-body {
+    padding: 1rem !important;
+  }
+
+  .dashboard-donut-shell,
+  .dashboard-bar-shell,
+  .dashboard-chart-empty {
+    min-height: 220px;
+  }
+
+  .dashboard-donut-center {
+    width: 92px;
+    height: 92px;
+  }
+
+  .dashboard-donut-center strong {
+    font-size: 1.35rem;
+  }
+
+  .dashboard-chart-legend-item,
+  .dashboard-chart-legend-copy,
+  .how-benefit-item {
+    min-width: 0;
+  }
+
+  .dashboard-chart-legend-label,
+  .jobs-card-title,
+  .jobs-card-role,
+  .jobs-card-value,
+  .job-details-value,
+  .job-details-notes-text,
+  .how-benefit-item span:last-child {
+    overflow-wrap: anywhere;
+  }
+
+  .jobs-status-badge,
+  .jobs-type-badge,
+  .jobs-neutral-badge,
+  .dashboard-status-badge {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .jobs-card-chips {
+    align-items: stretch;
+  }
+
+  .jobs-card-chips > span {
+    flex: 1 1 100%;
+  }
+
+  .add-job-page,
+  .auth-page,
+  .how-page {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .add-job-form-card .card-body {
+    padding: 1rem !important;
+  }
+
+  .add-job-section + .add-job-section {
+    margin-top: 1rem;
+  }
+
+  .auth-panel-brand,
+  .auth-panel-form {
+    padding: 1.2rem 1rem;
+  }
+
+  .auth-feature-list {
+    gap: 0.75rem;
+    margin-top: 1.2rem;
+  }
+
+  .auth-feature-card {
+    padding: 0.85rem;
+    border-radius: 14px;
+  }
+
+  .how-title {
+    font-size: 2rem;
+  }
+
+  .how-hero-copy,
+  .how-story-card,
+  .how-step-card {
+    padding: 1rem;
+  }
+
+  .table-responsive {
+    margin-inline: -0.25rem;
+    padding-inline: 0.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .jobnest-navbar-brand {
+    max-width: calc(100% - 54px);
   }
 }
